@@ -10,12 +10,12 @@ def index(request):
         "entries": util.list_entries()
     })
 
-def entry(request, name):
-    page = util.get_entry(name)
+def entry(request, entry):
+    page = util.get_entry(entry)
     if (page == None):
         return
     else:
-        html = markdown2.markdown_path(f"entries/{name}.md")
+        html = markdown2.markdown_path(f"entries/{entry}.md")
 
         return render(request, "encyclopedia/entry.html", {
             "html" : html
