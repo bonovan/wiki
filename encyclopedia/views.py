@@ -13,11 +13,14 @@ def index(request):
 def entry(request, entry):
     page = util.get_entry(entry)
     if (page == None):
-        return
+        return render(request, "encyclopedia/error.html")
     else:
         html = markdown2.markdown_path(f"entries/{entry}.md")
 
         return render(request, "encyclopedia/entry.html", {
             "html" : html
         })
+
+def new(request):
+    return render(request, "encyclopedia/new.html")
 
