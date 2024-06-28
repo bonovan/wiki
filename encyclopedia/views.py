@@ -1,11 +1,12 @@
+from django import forms
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from . import util
 
 import markdown2
 import random
-
-#create a class that accepts a search input
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -63,3 +64,20 @@ def search(request):
                     "entries" : valid_entries
                 })
     
+def create(request):
+    if request.method == "GET":
+        return render(request, "encyclopedia/create.html")
+    else:
+        title = request.POST['title']
+        content = request.POST['content']
+
+        entry = util.get_entry(title)
+        if entry is not None:
+            return render(request, "encyclopedia/error.html")
+        else:
+            html = markdown2.markdown(content)
+            util.save_entry(title, content)
+            return render(request, "encyclopedia/entry.html", {
+                "html" : html,
+                "title" : title
+            })
