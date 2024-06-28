@@ -85,3 +85,29 @@ def create(request):
                 "html" : html,
                 "title" : title
             })
+        
+def edit(request):
+    if request.method == "POST":
+        title = request.POST['page_title']
+        marks = util.get_entry(title)
+
+        return render(request, "encyclopedia/edit.html", {
+            "markdown" : marks,
+            "title" : title
+        })
+    else:
+        return render(request, "encyclopedia/error.html", {
+            "message" : "incorrect request method"
+        })
+    
+def save(request):
+    if request.method == "POST":
+        title = request.POST['page_title']
+        content = request.POST['content']
+        util.save_entry(title, content)
+
+        html = markdown2.markdown(content)
+        return render(request, "encyclopedia/entry.html", {
+            "html" : html,
+            "title" : title
+        })
