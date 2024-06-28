@@ -58,7 +58,9 @@ def search(request):
                     valid_entries.append(entry)
 
             if not valid_entries:
-                return render(request, "encyclopedia/error.html")
+                return render(request, "encyclopedia/error.html", {
+                    "message" : "There are no entries that match your search"
+                })
             else:
                 return render(request, "encyclopedia/search.html", {
                     "entries" : valid_entries
@@ -73,7 +75,9 @@ def create(request):
 
         entry = util.get_entry(title)
         if entry is not None:
-            return render(request, "encyclopedia/error.html")
+            return render(request, "encyclopedia/error.html", {
+                "message" : "There already exists a file with this title"
+            })
         else:
             html = markdown2.markdown(content)
             util.save_entry(title, content)
